@@ -25,20 +25,33 @@ end
 
 DiffPt(x; partial=()) = DiffPt{length(x)}(x, partial) # convenience constructor
 
+""" 
+	partial(fun, idx)
+
+Return ∂ᵢf where
+	f = fun
+	i = idx
 """
-Take the partial derivative of a function `fun`  with input dimesion `dim`.
-If partials=(i,j), then (∂ᵢ∂ⱼ fun) is returned.
+function partial(fun, idx)
+	return x -> FD.derivative(0) do dx
+		y = similar(x)
+		y = copyto!(y, x)
+		y[idx] += dx
+		fun(y)
+	end
+end
+
 """
-function partial(fun, dim, partials=())
-    if !isnothing(local next = iterate(partials))
-        idx, state = next
-        return partial(
-            x -> FD.derivative(0) do dx
-                fun(x .+ dx * OneHotVector(idx, dim))
-            end, dim, Base.rest(partials, state)
-        )
-    end
-    return fun
+	partial(fun, indices...)
+
+Return the partial derivative with respect to all indices, e.g.
+```julia
+partial(f, i, j) # = ∂ᵢ∂ⱼf
+```
+"""
+function partial(fun, indices...)
+	idx, state = iterate(indices)
+	return partial(partial(fun, idx), Base.rest(indices, state)...)
 end
 
 """
@@ -74,7 +87,20 @@ then julia would not know whether to use
 `(::SpecialKernel)(x,y)` or `(::Kernel)(x::DiffPt, y::DiffPt)`
 ```
 =#
-for T in [SimpleKernel, Kernel] #subtypes(Kernel)
+for T in [
+		SimpleKernel,
+		Kernel,
+		ZeroKernel,
+		NeuralNetworkKernel,
+		NeuralKernelNetwork,
+		GibbsKernel,
+		WienerKernel,
+		WienerKernel{2},
+		TransformedKernel,
+		KernelSum,
+		NormalizedKernel,
+		KernelTensorProduct
+	] #subtypes(Kernel)
     (k::T)(x::DiffPt{Dim}, y::DiffPt{Dim}) where {Dim} = _evaluate(k, x, y)
     (k::T)(x::DiffPt{Dim}, y) where {Dim} = _evaluate(k, x, DiffPt(y))
     (k::T)(x, y::DiffPt{Dim}) where {Dim} = _evaluate(k, DiffPt(x), y)
