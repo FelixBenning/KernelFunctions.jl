@@ -36,7 +36,7 @@ end
 
 GibbsKernel(; lengthscale) = GibbsKernel(lengthscale)
 
-function (k::GibbsKernel)(x, y)
+function kernelCall(k::GibbsKernel, x, y)
     lengthscale = k.lengthscale
     lx = lengthscale(x)
     ly = lengthscale(y)

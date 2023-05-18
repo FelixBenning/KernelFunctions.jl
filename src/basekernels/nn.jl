@@ -33,7 +33,7 @@ for inputs ``x, x' \\in \\mathbb{R}^d``.[^CW]
 """
 struct NeuralNetworkKernel <: Kernel end
 
-function (κ::NeuralNetworkKernel)(x, y)
+function kernelCall(κ::NeuralNetworkKernel, x, y)
     return asin(dot(x, y) / sqrt((1 + sum(abs2, x)) * (1 + sum(abs2, y))))
 end
 

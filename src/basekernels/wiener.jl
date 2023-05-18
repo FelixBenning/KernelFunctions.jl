@@ -52,27 +52,27 @@ function WienerKernel(; i::Integer=0)
     return WienerKernel{i}()
 end
 
-function (::WienerKernel{0})(x, y)
+function kernelCall(::WienerKernel{0}, x, y)
     X = sqrt(sum(abs2, x))
     Y = sqrt(sum(abs2, y))
     return min(X, Y)
 end
 
-function (::WienerKernel{1})(x, y)
+function kernelCall(::WienerKernel{1}, x, y)
     X = sqrt(sum(abs2, x))
     Y = sqrt(sum(abs2, y))
     minXY = min(X, Y)
     return 1 / 3 * minXY^3 + 1 / 2 * minXY^2 * euclidean(x, y)
 end
 
-function (::WienerKernel{2})(x, y)
+function kernelCall(::WienerKernel{2}, x, y)
     X = sqrt(sum(abs2, x))
     Y = sqrt(sum(abs2, y))
     minXY = min(X, Y)
     return 1 / 20 * minXY^5 + 1 / 12 * minXY^3 * euclidean(x, y) * (X + Y - 1 / 2 * minXY)
 end
 
-function (::WienerKernel{3})(x, y)
+function kernelCall(::WienerKernel{3}, x, y)
     X = sqrt(sum(abs2, x))
     Y = sqrt(sum(abs2, y))
     minXY = min(X, Y)

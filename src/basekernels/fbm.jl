@@ -24,7 +24,7 @@ FBMKernel(; h::Real=0.5) = FBMKernel(h)
 
 @functor FBMKernel
 
-function (κ::FBMKernel)(x::AbstractVector{<:Real}, y::AbstractVector{<:Real})
+function kernelCall(κ::FBMKernel, x::AbstractVector{<:Real}, y::AbstractVector{<:Real})
     modX = sum(abs2, x)
     modY = sum(abs2, y)
     modXY = sqeuclidean(x, y)
@@ -32,7 +32,7 @@ function (κ::FBMKernel)(x::AbstractVector{<:Real}, y::AbstractVector{<:Real})
     return (modX^h + modY^h - modXY^h) / 2
 end
 
-function (κ::FBMKernel)(x::Real, y::Real)
+function kernelCall(κ::FBMKernel, x::Real, y::Real)
     return (abs2(x)^only(κ.h) + abs2(y)^only(κ.h) - abs2(x - y)^only(κ.h)) / 2
 end
 

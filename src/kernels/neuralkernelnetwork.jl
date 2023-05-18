@@ -76,7 +76,7 @@ end
 _rebuild_kernel(x, n, m) = reshape(x, n, m)
 _rebuild_diag(x) = reshape(x, :)
 
-(κ::NeuralKernelNetwork)(x, y) = only(kernelmatrix(κ, [x], [y]))
+kernelCall(κ::NeuralKernelNetwork, x, y) = only(kernelmatrix(κ, [x], [y]))
 
 function kernelmatrix_diag(nkn::NeuralKernelNetwork, x::AbstractVector)
     return _rebuild_diag(nkn.nn(ew(nkn.primitives, x)))

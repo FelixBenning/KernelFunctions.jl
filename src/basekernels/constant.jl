@@ -20,7 +20,7 @@ kappa(::ZeroKernel, ::Real) = false
 metric(::ZeroKernel) = Delta()
 
 # Optimizations
-(::ZeroKernel)(x, y) = false
+kernelCall(::ZeroKernel, x, y) = false
 kernelmatrix(::ZeroKernel, x::AbstractVector) = Falses(length(x), length(x))
 function kernelmatrix(::ZeroKernel, x::AbstractVector, y::AbstractVector)
     validate_inputs(x, y)
@@ -111,7 +111,7 @@ kappa(κ::ConstantKernel, ::Real) = only(κ.c)
 metric(::ConstantKernel) = Delta()
 
 # Optimizations
-(k::ConstantKernel)(x, y) = only(k.c)
+kernelCall(k::ConstantKernel, x, y) = only(k.c)
 kernelmatrix(k::ConstantKernel, x::AbstractVector) = Fill(only(k.c), length(x), length(x))
 function kernelmatrix(k::ConstantKernel, x::AbstractVector, y::AbstractVector)
     validate_inputs(x, y)

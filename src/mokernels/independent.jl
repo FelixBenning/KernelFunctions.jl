@@ -23,7 +23,7 @@ struct IndependentMOKernel{Tkernel<:Kernel} <: MOKernel
     kernel::Tkernel
 end
 
-function (κ::IndependentMOKernel)((x, px)::Tuple{Any,Int}, (y, py)::Tuple{Any,Int})
+function kernelCall(κ::IndependentMOKernel, (x, px)::Tuple{Any,Int}, (y, py)::Tuple{Any,Int})
     return κ.kernel(x, y) * (px == py)
 end
 

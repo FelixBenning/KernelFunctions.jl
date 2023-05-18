@@ -23,7 +23,7 @@ end
 
 @functor ScaledKernel
 
-(k::ScaledKernel)(x, y) = only(k.σ²) * k.kernel(x, y)
+kernelCall(k::ScaledKernel, x, y) = only(k.σ²) * k.kernel(x, y)
 
 function kernelmatrix(κ::ScaledKernel, x::AbstractVector, y::AbstractVector)
     return only(κ.σ²) * kernelmatrix(κ.kernel, x, y)

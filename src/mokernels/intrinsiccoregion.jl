@@ -38,7 +38,7 @@ function IntrinsicCoregionMOKernel(kernel::Kernel, B::AbstractMatrix)
     return IntrinsicCoregionMOKernel{typeof(kernel),typeof(B)}(kernel, B)
 end
 
-function (k::IntrinsicCoregionMOKernel)((x, px)::Tuple{Any,Int}, (y, py)::Tuple{Any,Int})
+function kernelCall(k::IntrinsicCoregionMOKernel, (x, px)::Tuple{Any,Int}, (y, py)::Tuple{Any,Int})
     return k.B[px, py] * k.kernel(x, y)
 end
 

@@ -70,6 +70,8 @@ using Statistics: median!
 abstract type Kernel end
 abstract type SimpleKernel <: Kernel end
 
+@inline (k::Kernel)(x,y) = kernelCall(k, x, y)
+
 include("utils.jl")
 include("distances/pairwise.jl")
 include("distances/dotproduct.jl")

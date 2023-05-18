@@ -17,7 +17,7 @@ end
 
 @functor NormalizedKernel
 
-(κ::NormalizedKernel)(x, y) = κ.kernel(x, y) / sqrt(κ.kernel(x, x) * κ.kernel(y, y))
+kernelCall(κ::NormalizedKernel, x, y) = κ.kernel(x, y) / sqrt(κ.kernel(x, x) * κ.kernel(y, y))
 
 function kernelmatrix(κ::NormalizedKernel, x::AbstractVector, y::AbstractVector)
     x_diag = kernelmatrix_diag(κ.kernel, x)

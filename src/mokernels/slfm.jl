@@ -28,7 +28,7 @@ struct LatentFactorMOKernel{Tg,Te<:MOKernel,TA<:AbstractMatrix} <: MOKernel
     end
 end
 
-function (κ::LatentFactorMOKernel)((x, px)::Tuple{Any,Int}, (y, py)::Tuple{Any,Int})
+function kernelCall(κ::LatentFactorMOKernel, (x, px)::Tuple{Any,Int}, (y, py)::Tuple{Any,Int})
     cov_f = sum(κ.A[px, q] * κ.g[q](x, y) * κ.A[py, q] for q in 1:length(κ.g))
     return cov_f + κ.e((x, px), (y, py))
 end

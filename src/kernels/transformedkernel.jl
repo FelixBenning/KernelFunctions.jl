@@ -16,12 +16,13 @@ end
 
 @functor TransformedKernel
 
-(k::TransformedKernel)(x, y) = k.kernel(k.transform(x), k.transform(y))
+kernelCall(k::TransformedKernel, x, y) = k.kernel(k.transform(x), k.transform(y))
 
 # Optimizations for scale transforms of simple kernels to save allocations:
 # Instead of a multiplying every element of the inputs before evaluating the metric,
 # we perform a scalar multiplcation of the distance of the original inputs, if possible.
-function (k::TransformedKernel{<:SimpleKernel,<:ScaleTransform})(
+function kernelCall(
+    k::TransformedKernel{<:SimpleKernel,<:ScaleTransform},
     x::AbstractVector{<:Real}, y::AbstractVector{<:Real}
 )
     return kappa(k.kernel, _scale(k.transform, metric(k.kernel), x, y))
